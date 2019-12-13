@@ -15,8 +15,13 @@ base_gcs_path = 'gs://cloudml-demo-vcm/ftc_ml/'
 # base_gcs_path + dict_key + '/' + filename
 
 data_array = []
-
+train=.8
+val = .9
 for (dict_key, files_list) in files_dict.items():
+    total = len(files_list)
+    trainCnt = total * train
+    valCnt = total * val
+    i = 0;
     for filename in files_list:
         #         print(base_gcs_path + dict_key + '/' + filename)
         if '.jpg' not in filename:
@@ -24,8 +29,9 @@ for (dict_key, files_list) in files_dict.items():
 
         label = dict_key
         #         label = 'chair' if 'chair' in dict_key else dict_key # for grouping all chairs as one label
-
-        data_array.append((base_gcs_path + dict_key + '/' + filename, label))
+        type = "TRAIN" if i < trainCnt else "VALIDATION" if i < valCnt else "TEST"
+        i += 1
+        data_array.append((type, base_gcs_path + dict_key + '/' + filename, label))
 
 dataframe = pd.DataFrame(data_array)
 dataframe.to_csv('all_data.csv', index=False, header=False)

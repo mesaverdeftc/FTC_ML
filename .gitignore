@@ -2,5 +2,5 @@ venv3
 .DS_Store
 .idea
 *.MOV
-
+*.mov
 
